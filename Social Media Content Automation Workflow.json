@@ -1,0 +1,3432 @@
+{
+  "name": "Finalised Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "=me",
+        "edge": "photos",
+        "sendBinaryData": true,
+        "binaryPropertyName": "=data",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "message",
+                "value": "={{ $('Media Team Data').item.json.Caption }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        432
+      ],
+      "id": "1b556360-54ba-45a5-b07e-1303c235ff88",
+      "name": "post to facebook",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "Fn9eD4CaZi2ZnEKf",
+          "name": "Facebook Graph account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "multynetledtv40@gmail.com",
+        "subject": "Approval Needed: Your Scheduled Social Media Content",
+        "message": "=Post Approval Needed For Following Post:\n<strong>Posted On:</strong> {{ $('Media Team Data').item.json.Date }}\n<strong>Post Title:</strong> {{ $('Form to be filled on execution by Team').item.json['Post Title'] }}\n<strong>Post Type:</strong> {{ $('Form to be filled on execution by Team').item.json['Post Type'] }}\n<strong>Caption:</strong> {{ $('Form to be filled on execution by Team').item.json.Caption }}\n<strong>Media Link:</strong> {{ $('Form to be filled on execution by Team').item.json['Media Link'] }}\n<strong>Target Platforms:</strong> {{ $('Form to be filled on execution by Team').item.json['Target Platform'] }}\n<strong>Media Status:</strong> {{ $('Media Team Data').item.json['Media Status'] }}\n",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double",
+            "approveLabel": "Yes",
+            "disapproveLabel": "No"
+          }
+        },
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 0.5,
+              "resumeUnit": "minutes"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -2064,
+        576
+      ],
+      "id": "bba9a4eb-089f-4308-b278-edc8a9b00a10",
+      "name": "Send message and wait for response",
+      "webhookId": "9e4de8aa-94e3-4432-b75f-e01f791b0a54",
+      "alwaysOutputData": true,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=20883542#gid=20883542",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now.format('dd-MM-yyyy') }}",
+            "Post Title": "={{ $json['Post Title'] }}",
+            "Post Type": "={{ $json['Post Type'] }}",
+            "Caption": "={{ $json.Caption }}",
+            "Media Link": "={{ $json['Media Link'] }}",
+            "Media Status": "={{ $if($json['Media Link'], \"Done\", \"Pending\") }}\n",
+            "Publisher Status": "Done",
+            "Target Platforms": "={{\n  $if(\n    [\"Facebook\", \"Instagram\", \"Whatsapp\", \"LinkedIn\"].every(p => $json['Target Platform'].includes(p)),\n    \"All Platforms\",\n    $json['Target Platform'].join(\", \")\n  )\n}}",
+            "Posting ID": "={{ $json.my_new_field }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Type",
+              "displayName": "Post Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Link",
+              "displayName": "Media Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Target Platforms",
+              "displayName": "Target Platforms",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Status",
+              "displayName": "Media Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Publisher Status",
+              "displayName": "Publisher Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Approval",
+              "displayName": "Final Approval",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Remarks",
+              "displayName": "Remarks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3264,
+        816
+      ],
+      "id": "12511781-e800-4a95-8686-d5b3f0635de5",
+      "name": "Media Team Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=20883542#gid=20883542",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $('Media Team Data').item.json.Date }}",
+            "Post Title": "={{ $('Media Team Data').item.json['Post Title'] }}",
+            "Post Type": "={{ $('Media Team Data').item.json['Post Type'] }}",
+            "Caption": "={{ $('Media Team Data').item.json.Caption }}",
+            "Media Link": "={{ $('Media Team Data').item.json['Media Link'] }}",
+            "Target Platforms": "={{ $('Media Team Data').item.json['Target Platforms'] }}",
+            "Media Status": "={{ $('Media Team Data').item.json['Media Status'] }}",
+            "Publisher Status": "={{ $('Media Team Data').item.json['Publisher Status'] }}",
+            "Final Approval": "={{ $if($json.data.approved, \"Yes\", \"No\") }}",
+            "Time": "={{ $now.format('HH:mm') }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Posting ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Type",
+              "displayName": "Post Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Link",
+              "displayName": "Media Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Target Platforms",
+              "displayName": "Target Platforms",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Status",
+              "displayName": "Media Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Publisher Status",
+              "displayName": "Publisher Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Approval",
+              "displayName": "Final Approval",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Remarks",
+              "displayName": "Remarks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1360,
+        544
+      ],
+      "id": "ddfbd50f-fcd1-4212-b41d-61b971052e0a",
+      "name": "Data after Admin Validation",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Media Team Data').item.json['Target Platforms'] }}",
+                    "rightValue": "Instagram",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    },
+                    "id": "c18aadfc-8af8-4ff9-8d49-e76bbff25865"
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Instagram"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "dfc59841-4bc7-4d9b-a53a-5cfd5ec05864",
+                    "leftValue": "={{ $('Media Team Data').item.json['Target Platforms'] }}",
+                    "rightValue": "Facebook",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Facebook"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "527aef5d-380a-47cf-a4e8-1150f891f87e",
+                    "leftValue": "={{ $('Media Team Data').item.json['Target Platforms'] }}",
+                    "rightValue": "LinkedIn",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains",
+                      "rightType": "any"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "LinkedIn"
+            }
+          ]
+        },
+        "options": {
+          "allMatchingOutputs": true
+        }
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.3,
+      "position": [
+        -352,
+        208
+      ],
+      "id": "164bf8b0-8498-4ef8-99ab-1c2961514b0f",
+      "name": "Choose between platforms"
+    },
+    {
+      "parameters": {
+        "person": "aM5MfgaaaS",
+        "text": "={{ $('Media Team Data').item.json.Caption }}",
+        "shareMediaCategory": "IMAGE",
+        "additionalFields": {
+          "title": "={{ $('Media Team Data').item.json['Post Title'] }}"
+        }
+      },
+      "type": "n8n-nodes-base.linkedIn",
+      "typeVersion": 1,
+      "position": [
+        -128,
+        624
+      ],
+      "id": "4f68297e-3c98-4828-b011-77fb5d8066ed",
+      "name": "Create LinkedIn post",
+      "credentials": {
+        "linkedInOAuth2Api": {
+          "id": "V35wvfGXuB9Mrpv2",
+          "name": "LinkedIn account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.cloudinary.com/v1_1/djnbdjql4/image/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            },
+            {
+              "name": "upload_preset",
+              "value": "n8n_unsigned"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        -128,
+        128
+      ],
+      "id": "273a6749-015a-413f-8e73-8835451954b3",
+      "name": "HTTP Request",
+      "retryOnFail": true,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "=17841478393042453",
+        "edge": "media",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "image_url",
+                "value": "={{ $json.url }}"
+              },
+              {
+                "name": "caption",
+                "value": "={{ $('Media Team Data').item.json.Caption }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "be1ae447-ba27-49f5-baa6-b4246c7dd529",
+      "name": "Create Instagram Container ID",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        96,
+        48
+      ],
+      "retryOnFail": true,
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "Fn9eD4CaZi2ZnEKf",
+          "name": "Facebook Graph account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        0
+      ],
+      "id": "f42cbe59-0d1e-4fe7-a7a7-b014b5498315",
+      "name": "Wait",
+      "webhookId": "01adb68c-893c-444a-ad4f-9babed41c1aa"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=86940696#gid=86940696",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Post ID": "={{ $if($json.id, $json.id, \"None\")}}",
+            "Platform": "Instagram",
+            "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
+            "Result": "={{ $if($json?.id, \"Successful\", \"Unsuccessful\") }}\n",
+            "Post Title": "={{ $('Data after Admin Validation').item.json['Post Title'] }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Post ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Result",
+              "displayName": "Result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        768,
+        0
+      ],
+      "id": "b6b02559-e8c3-4435-9efc-53c6cecd1f61",
+      "name": "Event Log for IG",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=86940696#gid=86940696",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Post ID": "={{ $if($json.post_id, $json.post_id, \"None\") }}",
+            "Platform": "Facebook",
+            "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
+            "Post Title": "={{ $('Data after Admin Validation').item.json['Post Title'] }}",
+            "Result": "={{ $if($json?.post_id, \"Successful\", \"Unsuccessful\") }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Post ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Result",
+              "displayName": "Result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        96,
+        432
+      ],
+      "id": "246e4e43-2ebb-4802-963b-65dc5100c53e",
+      "name": "Event Log For FB",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=86940696#gid=86940696",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Post ID": "={{ $if($json.urn, $json.urn, 'None') }}",
+            "Platform": "LinkedIn",
+            "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
+            "Result": "={{ $if($json.urn,\"Successful\", 'Unsuccessful') }}",
+            "Post Title": "={{ $('Data after Admin Validation').item.json['Post Title'] }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Post ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Result",
+              "displayName": "Result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        96,
+        624
+      ],
+      "id": "d2387283-9409-46ac-ac71-36cd246fc2dd",
+      "name": "Event Log for LinkedIn",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Workflow Continuation Failure",
+        "message": "=<strong>Hi Media Team</strong>,\n<br></br>\nAn Error Occured while automating the process. This is due to:\n<ol>\n  <li><strong>Private Drive Link</strong></li>\n  <li><strong>Image link not provided</strong></li>\n</ol>\n<br></br>\nRegards,\n<br></br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {}
+      },
+      "id": "8500cfac-4394-4dfe-9ad7-78ab66e06819",
+      "name": "Send Error Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -2048,
+        1248
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=86940696#gid=86940696",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Post ID": "=None",
+            "Platform": "Instagram",
+            "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
+            "Result": "=UnSuccessful",
+            "Post Title": "={{ $('Data after Admin Validation').item.json['Post Title'] }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Post ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Result",
+              "displayName": "Result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        544,
+        224
+      ],
+      "id": "e3828879-0dd0-46a2-b4b0-10123ca08613",
+      "name": "Event Log for IG Error",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.Email }}",
+        "subject": "Incorrect Google Drive Media Link Credentials",
+        "message": "=<strong>Dear Media Team</strong>,\n<br></br>\nWe attempted to process the Google Drive media link you provided, but it appears that the credentials are incorrect. As a result, the link cannot be executed successfully.\n<br></br>\nKindly review the link and ensure that the correct access permissions or credentials are enabled, then refill the form.\n<br></br>\nThank you.\n<br></br>\nBest regards,\n<br></br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1776,
+        1152
+      ],
+      "id": "360a9ac8-5745-43f7-a6db-69979d76787f",
+      "name": "Wrong Media Link Message",
+      "webhookId": "9e4de8aa-94e3-4432-b75f-e01f791b0a54",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Incorrect Google Drive Media Link Credentials",
+        "message": "=<strong>Dear Media Team</strong>,\n<br></br>\nWe attempted to process the Google Drive media link you provided, but it appears that the credentials are incorrect. As a result, the link cannot be executed.\n<br></br>\nKindly review the link and ensure that the correct access permissions or credentials are enabled, then refill the form.\n<br></br>\nThank you.\n<br></br>\nBest regards,\n<br></br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -880,
+        736
+      ],
+      "id": "3f088b71-2635-48c7-b0ed-8e6fea34cbf2",
+      "name": "Official Post Error",
+      "webhookId": "9e4de8aa-94e3-4432-b75f-e01f791b0a54",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Post Upload Failed on Instagram",
+        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation failed to post on Instagram.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Instagram\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "b222ad91-01d5-41c3-91b0-407dc983445f",
+      "name": "Failed Post Error On Instagram",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1264,
+        -16
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Post Upload Failed on Instagram",
+        "message": "=<strong>Hi Media Team</strong>,\n<br><br>\nThe Automation failed to post on Instagram.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Form to be filled on execution by Team').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Instagram\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "8364ce41-171e-4260-bb8c-badc7d2c405d",
+      "name": "Failed Post Error On Instagram (1)",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        320,
+        224
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Post Upload Failed on Facebook",
+        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation Failed to post on Facebook\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Facebook\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "8efd67ba-0c4a-48de-9db9-3caf0b2dae02",
+      "name": "Failed Post Error On Facebook",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        304
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Post Upload Failed on LinkedIn",
+        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation Failed to post on LinkedIn.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Form to be filled on execution by Team').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> LinkedIn\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "a3bdff8b-7e82-4c74-b47e-42f219e50ac9",
+      "name": "Failed Post Error On LinkedIn",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        656,
+        608
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=86940696#gid=86940696",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Post ID": "=None",
+            "Platform": "={{ Array.isArray($('Form to be filled on execution by Team').item.json['Target Platform']) ? $('Form to be filled on execution by Team').item.json['Target Platform'].join(',') : $('Form to be filled on execution by Team').item.json['Target Platform'] }}",
+            "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
+            "Result": "=UnSuccessful",
+            "Post Title": "={{ $('Form to be filled on execution by Team').item.json['Post Title'] }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Post ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Result",
+              "displayName": "Result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -608,
+        944
+      ],
+      "id": "aa66d03d-879d-469e-8cf5-ea8b4878b871",
+      "name": "Official Post Error Event Log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=20883542#gid=20883542",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Final Approval": "No",
+            "Time": "={{ $now.format('HH:mm') }}",
+            "Date": "={{ $now.format('dd-MM-yyyy') }}",
+            "Post Title": "={{ $('Form to be filled on execution by Team').item.json['Post Title'] }}",
+            "Post Type": "={{ $('Form to be filled on execution by Team').item.json['Post Type'] }}",
+            "Caption": "={{ $('Form to be filled on execution by Team').item.json.Caption }}",
+            "Media Link": "={{ $('Form to be filled on execution by Team').item.json['Media Link'] }}",
+            "Target Platforms": "={{ $('Media Team Data').item.json['Target Platforms'] }}",
+            "Media Status": "Delayed",
+            "Publisher Status": "Done",
+            "Remarks": "Wrong Photo provided for an official post",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Posting ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Type",
+              "displayName": "Post Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Link",
+              "displayName": "Media Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Target Platforms",
+              "displayName": "Target Platforms",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Status",
+              "displayName": "Media Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Publisher Status",
+              "displayName": "Publisher Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Approval",
+              "displayName": "Final Approval",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Remarks",
+              "displayName": "Remarks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -608,
+        752
+      ],
+      "id": "fe79df69-6179-4ddc-9f79-8bed0927dcb3",
+      "name": "Official Post Error (Data)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const uuid = () => {\n  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {\n    const r = Math.random() * 16 | 0;\n    const v = c === 'x' ? r : (r & 0x3 | 0x8);\n    return v.toString(16);\n  });\n};\n\nreturn $input.all().map((item, index) => ({\n  json: {\n    ...item.json,\n    my_new_field: uuid()\n  }\n}));"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3888,
+        944
+      ],
+      "id": "1a0a8d8c-cf3d-4ad7-9a20-a232b8f75132",
+      "name": "Code to Generate Unique ID",
+      "retryOnFail": false,
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "643fad6f-3b20-4623-a7b4-7218e06ec7fa",
+              "leftValue": "={{ $json['Media Link'] }}",
+              "rightValue": "=Un",
+              "operator": {
+                "type": "string",
+                "operation": "notStartsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -2384,
+        704
+      ],
+      "id": "4b747494-41aa-4b00-93c8-2fe8321a0b88",
+      "name": "Second If Condtion"
+    },
+    {
+      "parameters": {
+        "formTitle": "Social Media Post Form",
+        "formDescription": "Fill out this form to request approval for your social media content. We'll review it and reach out via email with any feedback or confirmation.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Post Title",
+              "placeholder": "Enter Poster Name.....",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Caption",
+              "fieldType": "textarea",
+              "placeholder": "=Enter caption for the post.....",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "placeholder": "Enter email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Media Link",
+              "placeholder": "Enter link.....",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Target Platform",
+              "fieldType": "checkbox",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Facebook"
+                  },
+                  {
+                    "option": "Instagram"
+                  },
+                  {
+                    "option": "LinkedIn"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Post Type",
+              "fieldType": "radio",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Official"
+                  },
+                  {
+                    "option": "Non-Official"
+                  }
+                ]
+              },
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -4096,
+        944
+      ],
+      "id": "21f0791e-b0f1-48e0-a076-c732361f47ea",
+      "name": "Form to be filled on execution by Team",
+      "webhookId": "4224ae51-2f4a-4294-828f-2903dce38c6f"
+    },
+    {
+      "parameters": {
+        "operation": "information"
+      },
+      "type": "n8n-nodes-base.editImage",
+      "typeVersion": 1,
+      "position": [
+        -2736,
+        800
+      ],
+      "id": "9e7d4a02-a0cb-4178-b3ad-dad55003c1c0",
+      "name": "Check Image",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json['Media Link'] }}",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -3040,
+        816
+      ],
+      "id": "a1846c2a-f227-4f59-9e94-84d7c982111d",
+      "name": "Read Image to check",
+      "retryOnFail": false,
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "oUhyxKDwRISJVzmb",
+          "name": "Google Drive account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "={{ $json[\"Media Link\"].match(/\\/d\\/([^/]+)/)[1] }}",
+          "mode": "id"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -576,
+        224
+      ],
+      "id": "bd286d8b-761c-48b4-b067-380e6559adef",
+      "name": "Read Image to Upload",
+      "retryOnFail": false,
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "oUhyxKDwRISJVzmb",
+          "name": "Google Drive account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=20883542#gid=20883542",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $('Media Team Data').item.json.Date }}",
+            "Post Title": "={{ $('Media Team Data').item.json['Post Title'] }}",
+            "Post Type": "={{ $('Media Team Data').item.json['Post Type'] }}",
+            "Caption": "={{ $('Media Team Data').item.json.Caption }}",
+            "Media Link": "={{ $('Media Team Data').item.json['Media Link'] }}",
+            "Target Platforms": "={{ $('Media Team Data').item.json['Target Platforms'] }}",
+            "Media Status": "={{ $('Media Team Data').item.json['Media Status'] }}",
+            "Publisher Status": "={{ $('Media Team Data').item.json['Publisher Status'] }}",
+            "Final Approval": "={{ $if($('Send message and wait for response').item.json.data.approved, \"Yes\", \"No\") }}",
+            "Time": "={{ $now.format('HH:mm') }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Posting ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Type",
+              "displayName": "Post Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Link",
+              "displayName": "Media Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Target Platforms",
+              "displayName": "Target Platforms",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Status",
+              "displayName": "Media Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Publisher Status",
+              "displayName": "Publisher Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Approval",
+              "displayName": "Final Approval",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Remarks",
+              "displayName": "Remarks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1008,
+        64
+      ],
+      "id": "1e12c774-814c-443a-b5a2-0d5c028f43ad",
+      "name": "Data after Admin Rejection",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Workflow Post Rejected ",
+        "message": "=<strong>Hi Media Team</strong>,\n<br></br>\nWe are sorry to say that the Admin has rejected your post. Please contact them for further clarification and questions.\n<br></br>\nRegards,\n<br></br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {}
+      },
+      "id": "8c6df6d0-cc7b-45f2-8dd6-299faa2f71a1",
+      "name": "Send Post Rejection Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1344,
+        320
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Workflow Verification Failed",
+        "message": "=<strong>Hi Media Team</strong>,\n<br></br>\nIt seems that the admin has missed approving your post. The automation has been cancelled to prevent any further error.\nPlease contact Admin for further clarification and questions.\n<br></br>\nRegards,\n<br></br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {}
+      },
+      "id": "29901ad5-5149-4ba1-aa0a-36b32a62fd6b",
+      "name": "Send Post Missed Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        -1504,
+        816
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=20883542#gid=20883542",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $('Media Team Data').item.json.Date }}",
+            "Post Title": "={{ $('Media Team Data').item.json['Post Title'] }}",
+            "Post Type": "={{ $('Media Team Data').item.json['Post Type'] }}",
+            "Caption": "={{ $('Media Team Data').item.json.Caption }}",
+            "Media Link": "={{ $('Media Team Data').item.json['Media Link'] }}",
+            "Target Platforms": "={{ $('Media Team Data').item.json['Target Platforms'] }}",
+            "Media Status": "={{ $('Media Team Data').item.json['Media Status'] }}",
+            "Publisher Status": "={{ $('Media Team Data').item.json['Publisher Status'] }}",
+            "Final Approval": "Delayed",
+            "Time": "={{ $now.format('HH:mm') }}",
+            "Posting ID": "={{ $('Media Team Data').item.json['Posting ID'] }}"
+          },
+          "matchingColumns": [
+            "Posting ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Type",
+              "displayName": "Post Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Link",
+              "displayName": "Media Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Target Platforms",
+              "displayName": "Target Platforms",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Status",
+              "displayName": "Media Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Publisher Status",
+              "displayName": "Publisher Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Approval",
+              "displayName": "Final Approval",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Remarks",
+              "displayName": "Remarks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1168,
+        752
+      ],
+      "id": "fe35a989-4171-4c9e-9d0d-7e380c231849",
+      "name": "Data after Admin Missed",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=86940696#gid=86940696",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Post ID": "=None",
+            "Platform": "={{ Array.isArray($('Form to be filled on execution by Team').item.json['Target Platform']) ? $('Form to be filled on execution by Team').item.json['Target Platform'].join(',') : $('Form to be filled on execution by Team').item.json['Target Platform'] }}",
+            "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
+            "Result": "=UnSuccessful",
+            "Post Title": "={{ $('Form to be filled on execution by Team').item.json['Post Title'] }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Post ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Result",
+              "displayName": "Result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1168,
+        928
+      ],
+      "id": "10a53c28-6f98-493f-a290-4e44db855a6e",
+      "name": "Data After Admin Missed Event Log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=86940696#gid=86940696",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Post ID": "=None",
+            "Platform": "={{ Array.isArray($('Form to be filled on execution by Team').item.json['Target Platform']) ? $('Form to be filled on execution by Team').item.json['Target Platform'].join(',') : $('Form to be filled on execution by Team').item.json['Target Platform'] }}",
+            "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
+            "Result": "=UnSuccessful",
+            "Post Title": "={{ $('Form to be filled on execution by Team').item.json['Post Title'] }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Post ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Result",
+              "displayName": "Result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1008,
+        240
+      ],
+      "id": "f81079e8-6467-4b85-8df6-89850e9a81a3",
+      "name": "Data After Admin Rejected Event Log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Post Uploaded Successfully on Instagram",
+        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation has successfully posted on Instagram.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Instagram\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "0c5f58db-2ba4-4bf9-a814-612a6c90b592",
+      "name": "Successful Post On Instagram",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1264,
+        192
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Post Uploaded Successfully on Facebook",
+        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation has successfully posted on Facebook.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Facebook\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "963ef200-46e1-4663-8642-bfcde4d55286",
+      "name": "Successful Post On Facebook",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        960,
+        480
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
+        "subject": "Post Uploaded Successfully on LinkedIn",
+        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation has successfully posted on LinkedIn.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> LinkedIn\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "248dc0f2-de40-46d6-a26c-7dce074b2fde",
+      "name": "Successful Post On linkedIn",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        656,
+        784
+      ],
+      "webhookId": "5a6ceb8c-0e0b-4548-89ba-b18f6a825939",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "Oc0QysSzRJ7c55O0",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=86940696#gid=86940696",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Post ID": "=None",
+            "Platform": "={{ Array.isArray($('Form to be filled on execution by Team').item.json['Target Platform']) ? $('Form to be filled on execution by Team').item.json['Target Platform'].join(',') : $('Form to be filled on execution by Team').item.json['Target Platform'] }}",
+            "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
+            "Result": "=UnSuccessful",
+            "Post Title": "={{ $('Form to be filled on execution by Team').item.json['Post Title'] }}",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Post ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post ID",
+              "displayName": "Post ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Platform",
+              "displayName": "Platform",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Result",
+              "displayName": "Result",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1488,
+        1248
+      ],
+      "id": "c9309ff8-866c-47ae-9919-0191c3c824fb",
+      "name": "Wrong Drive Link Error Event Log",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1MfmvbgVgz_qip8qA-I3F4itw1Kj17L933l_bNxSIOF0/edit?gid=20883542#gid=20883542",
+          "mode": "url"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now.format('dd-MM-yyyy') }}",
+            "Post Title": "={{ $('Form to be filled on execution by Team').item.json['Post Title'] }}",
+            "Post Type": "={{ $('Form to be filled on execution by Team').item.json['Post Type'] }}",
+            "Caption": "={{ $('Form to be filled on execution by Team').item.json.Caption }}",
+            "Media Link": "={{ $('Form to be filled on execution by Team').item.json['Media Link'] }}",
+            "Target Platforms": "={{ Array.isArray($('Form to be filled on execution by Team').item.json['Target Platform']) ? $('Form to be filled on execution by Team').item.json['Target Platform'].join(',') : $('Form to be filled on execution by Team').item.json['Target Platform'] }}",
+            "Media Status": "Delayed",
+            "Publisher Status": "=Done",
+            "Final Approval": "=No",
+            "Time": "={{ $now.format('HH:mm') }}",
+            "Remarks": "Wrong Drive Link Provided",
+            "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
+          },
+          "matchingColumns": [
+            "Posting ID"
+          ],
+          "schema": [
+            {
+              "id": "Posting ID",
+              "displayName": "Posting ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Title",
+              "displayName": "Post Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Post Type",
+              "displayName": "Post Type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Caption",
+              "displayName": "Caption",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Link",
+              "displayName": "Media Link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Target Platforms",
+              "displayName": "Target Platforms",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Media Status",
+              "displayName": "Media Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Publisher Status",
+              "displayName": "Publisher Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Approval",
+              "displayName": "Final Approval",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Remarks",
+              "displayName": "Remarks",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1488,
+        1088
+      ],
+      "id": "39fc61c8-3cb5-4da4-ae46-8b5ae4c2a44b",
+      "name": "Wrong Drive Link (Content Hub)",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "eO1YS1SKiiFTtnhg",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "=17841478393042453",
+        "edge": "media_publish",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "caption",
+                "value": "={{ $('Media Team Data').item.json.Caption }}"
+              },
+              {
+                "name": "image_url",
+                "value": "={{ $('HTTP Request').item.json.url }}"
+              },
+              {
+                "name": "creation_id",
+                "value": "={{ $json.id }}"
+              }
+            ]
+          }
+        }
+      },
+      "id": "24f989d8-3795-4d58-b2f5-d74e588511e5",
+      "name": "Post to Instagram",
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        544,
+        0
+      ],
+      "retryOnFail": true,
+      "alwaysOutputData": true,
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "Fn9eD4CaZi2ZnEKf",
+          "name": "Facebook Graph account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "643fad6f-3b20-4623-a7b4-7218e06ec7fa",
+              "leftValue": "={{ $json.Result }}\n",
+              "rightValue": "Un",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        320,
+        432
+      ],
+      "id": "54cee4ca-56e4-4475-8b0a-bc162233a85c",
+      "name": "Seventh If Condtion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "643fad6f-3b20-4623-a7b4-7218e06ec7fa",
+              "leftValue": "={{ $json.Result }}\n",
+              "rightValue": "Un",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        320,
+        624
+      ],
+      "id": "ca40d7ce-2b8e-4512-b4d8-7831be0a7081",
+      "name": "Eighth If Condtion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "643fad6f-3b20-4623-a7b4-7218e06ec7fa",
+              "leftValue": "={{ $('Event Log for IG').item.json.Result?.trim() }}\n",
+              "rightValue": "Un",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1008,
+        0
+      ],
+      "id": "5862a63a-35b5-4406-9ae1-d8453a9c03ae",
+      "name": "Sixth If Condtion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "643fad6f-3b20-4623-a7b4-7218e06ec7fa",
+              "leftValue": "={{ \n    Object.values($('Check Image').item.json.size).join(\",\") === \"1280,1280\" && \n    $('Form to be filled on execution by Team').item.json['Post Type'] === \"Official\"\n}}",
+              "rightValue": "=Undef",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "217a2ebf-7d62-46ba-aca0-fe508556a669",
+              "leftValue": "={{ $('Form to be filled on execution by Team').item.json['Post Type'] }}",
+              "rightValue": "Non-Official",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1120,
+        544
+      ],
+      "id": "794f1ae0-c9bd-4100-9b3c-7f8f494507cb",
+      "name": "Fifth If Condtion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d9d32487-cc78-4305-aa80-7554db59424f",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": false,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1616,
+        560
+      ],
+      "id": "e94ce0e4-d138-49bf-ad91-78f48384d363",
+      "name": "Fourth If Condtion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d9d32487-cc78-4305-aa80-7554db59424f",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "=un",
+              "operator": {
+                "type": "boolean",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1824,
+        576
+      ],
+      "id": "a04e4f00-b1b1-4624-9f53-d35d1b43a2b8",
+      "name": "Third If Condtion"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "643fad6f-3b20-4623-a7b4-7218e06ec7fa",
+              "leftValue": "={{ $json['Media Link'] }}",
+              "rightValue": "drive.google.com",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -3696,
+        944
+      ],
+      "id": "6906f404-75bf-4f34-b91b-09c6df89efa9",
+      "name": "First If Condtion"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "post to facebook": {
+      "main": [
+        [
+          {
+            "node": "Event Log For FB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "Third If Condtion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Media Team Data": {
+      "main": [
+        [
+          {
+            "node": "Read Image to check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data after Admin Validation": {
+      "main": [
+        [
+          {
+            "node": "Fifth If Condtion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Choose between platforms": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "post to facebook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create LinkedIn post",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create LinkedIn post": {
+      "main": [
+        [
+          {
+            "node": "Event Log for LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Create Instagram Container ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failed Post Error On Instagram (1)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Instagram Container ID": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failed Post Error On Instagram (1)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Post to Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event Log for IG": {
+      "main": [
+        [
+          {
+            "node": "Sixth If Condtion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event Log For FB": {
+      "main": [
+        [
+          {
+            "node": "Seventh If Condtion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event Log for LinkedIn": {
+      "main": [
+        [
+          {
+            "node": "Eighth If Condtion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wrong Media Link Message": {
+      "main": [
+        [
+          {
+            "node": "Wrong Drive Link (Content Hub)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Wrong Drive Link Error Event Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Official Post Error": {
+      "main": [
+        [
+          {
+            "node": "Official Post Error (Data)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Official Post Error Event Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failed Post Error On Instagram (1)": {
+      "main": [
+        [
+          {
+            "node": "Event Log for IG Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code to Generate Unique ID": {
+      "main": [
+        [
+          {
+            "node": "First If Condtion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Second If Condtion": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wrong Media Link Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Form to be filled on execution by Team": {
+      "main": [
+        [
+          {
+            "node": "Code to Generate Unique ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Image": {
+      "main": [
+        [
+          {
+            "node": "Second If Condtion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Image to check": {
+      "main": [
+        [
+          {
+            "node": "Check Image",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Error Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read Image to Upload": {
+      "main": [
+        [
+          {
+            "node": "Choose between platforms",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data after Admin Rejection": {
+      "main": [
+        []
+      ]
+    },
+    "Send Post Rejection Email": {
+      "main": [
+        [
+          {
+            "node": "Data after Admin Rejection",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Data After Admin Rejected Event Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Post Missed Email": {
+      "main": [
+        [
+          {
+            "node": "Data after Admin Missed",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Data After Admin Missed Event Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post to Instagram": {
+      "main": [
+        [
+          {
+            "node": "Event Log for IG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Seventh If Condtion": {
+      "main": [
+        [
+          {
+            "node": "Failed Post Error On Facebook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Successful Post On Facebook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eighth If Condtion": {
+      "main": [
+        [
+          {
+            "node": "Failed Post Error On LinkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Successful Post On linkedIn",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sixth If Condtion": {
+      "main": [
+        [
+          {
+            "node": "Failed Post Error On Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Successful Post On Instagram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fifth If Condtion": {
+      "main": [
+        [
+          {
+            "node": "Read Image to Upload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Official Post Error",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fourth If Condtion": {
+      "main": [
+        [
+          {
+            "node": "Send Post Rejection Email",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Data after Admin Validation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Third If Condtion": {
+      "main": [
+        [
+          {
+            "node": "Fourth If Condtion",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send Post Missed Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "First If Condtion": {
+      "main": [
+        [
+          {
+            "node": "Media Team Data",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wrong Media Link Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "21bff3d2-9777-4038-a366-157482756060",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "661b5c256d2c054f55a1c8b470197e7f87bc2fa44ddee69e7c5bcaa08fe4c255"
+  },
+  "id": "BVMD4Lqe1HoWzHss",
+  "tags": []
+}
