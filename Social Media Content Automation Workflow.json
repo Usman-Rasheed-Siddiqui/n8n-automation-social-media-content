@@ -636,7 +636,7 @@
             "Post ID": "={{ $if($json.id, $json.id, \"None\")}}",
             "Platform": "Instagram",
             "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
-            "Result": "={{ $if($json?.id, \"Successful\", \"Unsuccessful\") }}\n",
+            "Result": "={{ $if($json?.id, \"Successful\", \"UnSuccessful\") }}\n",
             "Post Title": "={{ $('Data after Admin Validation').item.json['Post Title'] }}",
             "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
           },
@@ -743,7 +743,7 @@
             "Platform": "Facebook",
             "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
             "Post Title": "={{ $('Data after Admin Validation').item.json['Post Title'] }}",
-            "Result": "={{ $if($json?.post_id, \"Successful\", \"Unsuccessful\") }}",
+            "Result": "={{ $if($json?.post_id, \"Successful\", \"UnSuccessful\") }}",
             "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
           },
           "matchingColumns": [
@@ -848,7 +848,7 @@
             "Post ID": "={{ $if($json.urn, $json.urn, 'None') }}",
             "Platform": "LinkedIn",
             "Timestamp": "={{ $now.format(\"DD HH:mm\") }}",
-            "Result": "={{ $if($json.urn,\"Successful\", 'Unsuccessful') }}",
+            "Result": "={{ $if($json.urn,\"Successful\", 'UnSuccessful') }}",
             "Post Title": "={{ $('Data after Admin Validation').item.json['Post Title'] }}",
             "Posting ID": "={{ $('Code to Generate Unique ID').item.json.my_new_field }}"
           },
@@ -1114,7 +1114,7 @@
       "parameters": {
         "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
         "subject": "Post Upload Failed on Instagram",
-        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation failed to post on Instagram.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Instagram\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "message": "=<strong>Hello Media Team</strong>,\n<br><br>\nThe Automation failed to post on Instagram.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Instagram\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
         "options": {
           "appendAttribution": false
         }
@@ -1170,7 +1170,7 @@
       "parameters": {
         "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
         "subject": "Post Upload Failed on Facebook",
-        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation Failed to post on Facebook\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Facebook\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "message": "=<strong>Hello Media Team</strong>,\n<br><br>\nThe Automation Failed to post on Facebook\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Facebook\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
         "options": {
           "appendAttribution": false
         }
@@ -1198,7 +1198,7 @@
       "parameters": {
         "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
         "subject": "Post Upload Failed on LinkedIn",
-        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation Failed to post on LinkedIn.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Form to be filled on execution by Team').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> LinkedIn\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "message": "=<strong>Hello Media Team</strong>,\n<br><br>\nThe Automation Failed to post on LinkedIn.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Form to be filled on execution by Team').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> LinkedIn\n<br>\n<strong>Result:</strong>\nFailed\n<br><br>\nPlease try again or contact the admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
         "options": {
           "appendAttribution": false
         }
@@ -2303,7 +2303,7 @@
       "parameters": {
         "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
         "subject": "Post Uploaded Successfully on Instagram",
-        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation has successfully posted on Instagram.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Instagram\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "message": "=<strong>Hello Media Team</strong>,\n<br><br>\nThe Automation has successfully posted on Instagram.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Instagram\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
         "options": {
           "appendAttribution": false
         }
@@ -2331,7 +2331,7 @@
       "parameters": {
         "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
         "subject": "Post Uploaded Successfully on Facebook",
-        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation has successfully posted on Facebook.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Facebook\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "message": "=<strong>Hello Media Team</strong>,\n<br><br>\nThe Automation has successfully posted on Facebook.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> Facebook\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
         "options": {
           "appendAttribution": false
         }
@@ -2359,7 +2359,7 @@
       "parameters": {
         "sendTo": "={{ $('Form to be filled on execution by Team').item.json.Email }}",
         "subject": "Post Uploaded Successfully on LinkedIn",
-        "message": "=<strong>Hello Admin</strong>,\n<br><br>\nThe Automation has successfully posted on LinkedIn.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> LinkedIn\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
+        "message": "=<strong>Hello Media Team</strong>,\n<br><br>\nThe Automation has successfully posted on LinkedIn.\n<br><br>\n<b>Post Details:</b>\n<br>\n<strong>Title:</strong> {{ $('Data after Admin Validation').item.json['Post Title'] }}\n<br>\n<strong>Platform:</strong> LinkedIn\n<br>\n<strong>Result:</strong>\nSuccess\n<br><br>\nPlease wait one minute if the post is not visible on the platform. In case of long wait time, check your internet connection or connect the Admin for further assistance.\n<br><br>\nRegards,<br>\n<strong>Admin Team (n8n)</strong>",
         "options": {
           "appendAttribution": false
         }
@@ -3422,7 +3422,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "21bff3d2-9777-4038-a366-157482756060",
+  "versionId": "d7e9fdbc-7ab0-4bea-8d39-b0f3053eb4b8",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "661b5c256d2c054f55a1c8b470197e7f87bc2fa44ddee69e7c5bcaa08fe4c255"
