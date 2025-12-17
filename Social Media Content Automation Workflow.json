@@ -52,8 +52,8 @@
         "options": {
           "limitWaitTime": {
             "values": {
-              "resumeAmount": 0.5,
-              "resumeUnit": "minutes"
+              "resumeAmount": 3,
+              "resumeUnit": "days"
             }
           }
         }
@@ -3422,7 +3422,7 @@
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "d7e9fdbc-7ab0-4bea-8d39-b0f3053eb4b8",
+  "versionId": "58eea15a-8f4b-4fab-bcec-214ce2a1c96a",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "661b5c256d2c054f55a1c8b470197e7f87bc2fa44ddee69e7c5bcaa08fe4c255"
